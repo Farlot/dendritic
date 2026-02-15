@@ -7,9 +7,12 @@
     # --- All your standard NixOS config goes inside here ---
     
     imports = [
+      # Home manager
       inputs.home-manager.nixosModules.home-manager
+      # SOPS Secrets
       inputs.sops-nix.nixosModules.sops
-      # TODO: make nh.nix module and add
+      # NH helper
+      inputs.self.nixosModules.nh
     ];
 
     networking.networkmanager.enable = true;

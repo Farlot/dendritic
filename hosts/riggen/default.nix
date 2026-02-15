@@ -13,14 +13,24 @@
     };
     
     modules = [
-      # 1. Your hardware config
+      # Hardware config
       ./_files/hardware-configuration.nix
-      
-      # 2. Your main host config (combining your old hosts/default.nix & hosts/riggen.nix)
-      ./_files/configuration.nix
-      
-      # 3. Add sops-nix directly here since it's a flake input module
-      inputs.sops-nix.nixosModules.sops
+
+      # Common for all machines flake
+      inputs.self.nixosModules.common
+      inputs.self.nixosModules.riggen
+
+      # Home Manager
+      inputs.home-manager.nixosModules.home-manager
+      {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.backupFileExtension = "hm-bak";
+        home-manager.extraSpecialArgs = { inherit inputs; };
+
+        # Point this to your standalone home.nix in the root of the repo
+        home-manager.users.maw = import ../../home.nix;
+      }
     ];
   };
 }
