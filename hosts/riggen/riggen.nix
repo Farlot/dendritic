@@ -9,13 +9,12 @@
     # TODO: Turn these into flake parts one by one and re-enable them
     # ================================================================
     imports = [
-      #   inputs.stable-diffusion-webui-nix.nixosModules.default
+      inputs.stable-diffusion-webui-nix.nixosModules.default
       inputs.self.nixosModules.ollama
       inputs.self.nixosModules.wireguardvpn
       inputs.self.nixosModules.tailscale
       inputs.self.nixosModules.backup
       inputs.self.nixosModules.virt
-      #   inputs.self.nixosModules.gameservers
     ];
 
     # ================================================================
