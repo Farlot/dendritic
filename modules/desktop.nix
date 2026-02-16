@@ -42,7 +42,7 @@
       flatpak
       appimage-run
       btop
-      calcuse # Calendar
+      calcurse # Calendar
       ouch # CLI unzipperino
       tldr
     ];
