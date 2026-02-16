@@ -8,21 +8,21 @@
     # ================================================================
     # TODO: Turn these into flake parts one by one and re-enable them
     # ================================================================
-    # imports = [
-    #   inputs.stable-diffusion-webui-nix.nixosModules.default
-    #   inputs.self.nixosModules.ollama
-    #   inputs.self.nixosModules.wireguardvpn
-    #   inputs.self.nixosModules.tailscale
-    #   inputs.self.nixosModules.backup
-    #   inputs.self.nixosModules.gameservers
-    #   inputs.self.nixosModules.maintenance 
-    # ];
+    imports = [
+      #   inputs.stable-diffusion-webui-nix.nixosModules.default
+      inputs.self.nixosModules.ollama
+      inputs.self.nixosModules.wireguardvpn
+      inputs.self.nixosModules.tailscale
+      inputs.self.nixosModules.backup
+      inputs.self.nixosModules.virt
+      #   inputs.self.nixosModules.gameservers
+    ];
 
     # ================================================================
     # Hardware & Kernel Settings
     # ================================================================
     boot.kernelParams = [ "kvm.enable_virt_at_load=0" "nvidia-drm.fbdev=0" ];
-    
+
     hardware.ckb-next.enable = true;
     systemd.services.ckb-next = lib.mkIf config.hardware.ckb-next.enable {
       serviceConfig.ExecStart = lib.mkForce "${config.hardware.ckb-next.package}/bin/ckb-next-daemon --enable-experimental ${lib.optionalString (config.hardware.ckb-next.gid != null) "--gid=${builtins.toString config.hardware.ckb-next.gid}"}";
