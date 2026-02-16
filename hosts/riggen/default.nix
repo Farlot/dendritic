@@ -26,11 +26,11 @@
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
         home-manager.backupFileExtension = "hm-bak";
-        home-manager.extraSpecialArgs = { inherit inputs; };
-
-        # Point this to your standalone home.nix in the root of the repo
-        home-manager.users.maw = import ../../home.nix;
+        home-manager.extraSpecialArgs = { inherit inputs username; };
       }
+
+      # 4. Inject Riggen's Base Home Profile
+      inputs.self.nixosModules.riggen-home
     ];
   };
 }
