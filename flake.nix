@@ -34,12 +34,21 @@
 
   outputs = inputs@{ flake-parts, import-tree, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
 
       imports = [
         # This automatically discovers and imports flake-parts modules in ./hosts
         (import-tree ./hosts)
         (import-tree ./modules)
       ];
+
+      options.flake.homeManagerModules = inputs.nixpkgs.lib.mkOption {
+        type = inputs.nixpkgs.lib.types.lazyAttrsOf inputs.nixpkgs.lib.types.unspecified;
+        default = { };
+      };
+
+      config = {
+        systems = [ "x86_64-linux" ];
+      };
+
     };
 }

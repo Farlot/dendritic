@@ -16,6 +16,7 @@
       inputs.self.nixosModules.backup
       inputs.self.nixosModules.virt
       inputs.self.nixosModules.ckb
+      inputs.self.nixosModules.hyprland
     ];
 
     # ================================================================

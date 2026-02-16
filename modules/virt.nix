@@ -2,7 +2,7 @@
 
 {
   # Expose your virtualization stack as a reusable flake module!
-  flake.nixosModules.virt = { config, pkgs, lib, ... }: {
+  flake.nixosModules.virt = { config, pkgs, lib, username, ... }: {
 
 
     virtualisation = {

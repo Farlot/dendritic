@@ -2,10 +2,10 @@
 
 {
   # We expose this as a NixOS module so your host's assembly line can easily load it
-  flake.nixosModules.riggen-home = { config, pkgs, lib, username, ... }: {
+  flake.nixosModules.riggen-home = { pkgs, lib, username, ... }: {
     
     # This injects the Home Manager scope into the system build
-    home-manager.users.${username} = {
+    home-manager.users.${username} = { config, ... }: {
       
       # 1. Import all the pure dotfile modules we just made!
       imports = [
@@ -14,6 +14,8 @@
         inputs.self.homeManagerModules.scripts
         inputs.self.homeManagerModules.waybar
         inputs.self.homeManagerModules.yazi
+        inputs.self.homeManagerModules.stylix
+        inputs.self.homeManagerModules.neovim
       ];
 
       # 2. Base identity
@@ -92,19 +94,17 @@
 
 
       sops = {
-        defaultSopsFile = ./secrets/secrets.yaml;
+        defaultSopsFile = ../../secrets/secrets.yaml;
         defaultSopsFormat = "yaml";
         age.keyFile = "/home/maw/.config/sops/age/keys.txt"; # Matches your system config
 
         secrets.git_name = {};
         secrets.git_email = {};
-        templates."git-config" = {
-          content = ''
-      [user]
-        name = ${config.sops.placeholder.git_name}
-        email = ${config.sops.placeholder.git_email}
-          '';
-        };
+        templates."git-config".content = ''
+        [user]
+          name = ${config.sops.placeholder.git_name}
+          email = ${config.sops.placeholder.git_email}
+      '';
       };
 
 

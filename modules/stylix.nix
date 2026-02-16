@@ -2,7 +2,9 @@
 
 {
   # Expose your theming engine as a reusable flake module!
-  flake.nixosModules.stylix = { config, pkgs, lib, ... }: {
+  flake.homeManagerModules.stylix = { config, pkgs, lib, ... }: {
+
+    imports = [ inputs.stylix.homeManagerModules.stylix ];
 
     stylix = {
       enable = true;

@@ -139,93 +139,117 @@
             libraries = [ pkgs.python3Packages.requests ];
             flakeIgnore = [ "E501" ];
             } ''
-            import requests
-            import json
-            import sys
-            from datetime import datetime, timezone
+              import requests
+              import json
+              import sys
+              from datetime import datetime, timezone
 
-            URL = "https://tomestone.gg/character-contents/39794582/tiny-kaoi/activity?page=1"
-            HEADERS = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'application/json'
-            }
+              # API Endpoint
+              URL = "https://tomestone.gg/character-contents/39794582/tiny-kaoi/activity?page=1"
+              HEADERS = {
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                  'Accept': 'application/json'
+              }
 
-            try:
-            response = requests.get(URL, headers=HEADERS, timeout=15)
-            response.raise_for_status()
-            data = response.json()
+              try:
+                  response = requests.get(URL, headers=HEADERS, timeout=15)
+                  response.raise_for_status()
+                  data = response.json()
 
-            paginator = data.get('activities', {}).get('activities', {}).get('activities', {}).get('paginator', {})
-            activities = paginator.get('data', [])
+                  paginator = data.get('activities', {}).get('activities', {}).get('activities', {}).get('paginator', {})
+                  activities = paginator.get('data', [])
 
-            if not activities:
-            print(json.dumps({"text": ""}))
-            sys.exit(0)
+                  # If no data at all, hide module
+                  if not activities:
+                      print(json.dumps({"text": ""}))
+                      sys.exit(0)
 
-            latest = activities[0].get('activity', {})
-            raw_time = latest.get('endTime', "")
-            if not raw_time:
-            raw_time = latest.get('startTime', "")
+                  latest = activities[0].get('activity', {})
 
-            time_str = "??"
-            if raw_time:
-            try:
-            fight_end_utc = datetime.strptime(raw_time.split('.')[0], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
-            now_utc = datetime.now(timezone.utc)
-            if (now_utc - fight_end_utc).total_seconds() > 7200:
-            print(json.dumps({"text": ""}))
-            sys.exit(0)
-            fight_end_local = fight_end_utc.astimezone()
-            time_str = fight_end_local.strftime("%H:%M")
-            except ValueError:
-            pass
+                  # --- TIME & RECENCY CHECK ---
+                  # We use endTime (or fallback to startTime)
+                  # Note: Tomestone/FFLogs APIs usually return UTC times.
+                  raw_time = latest.get('endTime', "")
+                  if not raw_time:
+                      raw_time = latest.get('startTime', "")
 
-            full_name = latest.get('contentLocalizedName', 'Unknown')
-            fight_mappings = {
-            "AAC Light-heavyweight M1 (Savage)": "M1S",
-            "AAC Light-heavyweight M2 (Savage)": "M2S",
-            "AAC Light-heavyweight M3 (Savage)": "M3S",
-            "AAC Light-heavyweight M4 (Savage)": "M4S",
-            "AAC Heavyweight M3 (Savage)": "M11S",
-            "AAC Heavyweight M4 (Savage)": "M12S",
-            "The Omega Protocol (Ultimate)": "TOP",
-            "Futures Rewritten (Ultimate)": "FRU",
-            "Dragonsong's Reprise (Ultimate)": "DSR",
-            "The Epic of Alexander (Ultimate)": "TEA",
-            "The Weapon's Refrain (Ultimate)": "UWU",
-            "The Unending Coil of Bahamut (Ultimate)": "UCOB"
-            }
+                  time_str = "??"
 
-            if full_name in fight_mappings:
-            display_name = fight_mappings[full_name]
-            elif "(Unreal)" in full_name:
-            display_name = "Unreal"
-            else:
-            display_name = full_name.replace("(Savage)", "(S)").replace("(Ultimate)", "(U)")
+                  if raw_time:
+                      try:
+                          # 1. Parse the API time (Assuming UTC)
+                          # format ex: "2026-01-27 23:26:09.334"
+                          fight_end_utc = datetime.strptime(raw_time.split('.')[0], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+                          # 2. Get current time in UTC
+                          now_utc = datetime.now(timezone.utc)
+                          # 3. Check if fight was more than 2 hours (7200 seconds) ago
+                          if (now_utc - fight_end_utc).total_seconds() > 7200:
+                              # Return empty text to hide the module in Waybar
+                              print(json.dumps({"text": ""}))
+                              sys.exit(0)
+                          # 4. Convert to Local Time for Display
+                          fight_end_local = fight_end_utc.astimezone()
+                          time_str = fight_end_local.strftime("%H:%M")
 
-            kills = latest.get('killsCount', 0)
-            is_kill = kills > 0
-            if is_kill:
-            status_text = "CLEARED"
-            metric = latest.get('killDuration', 'N/A')
-            css_class = "cleared"
-            icon = ""
-            else:
-            status_text = "WIPE"
-            metric = latest.get('bestPercent', 'N/A')
-            css_class = "wipe"
-            icon = ""
+                      except ValueError:
+                          pass
 
-            output = {
-            "text": f"{icon} {display_name} {metric} [{time_str}]",
-            "tooltip": f"<b>{full_name}</b>\nStatus: {status_text}\nResult: {metric}\nEnded: {raw_time} (UTC)",
-            "class": css_class
-            }
-            print(json.dumps(output))
+                  # --- NAME PROCESSING ---
+                  full_name = latest.get('contentLocalizedName', 'Unknown')
+                  # Dictionary mapping full game names to common community abbreviations
+                  fight_mappings = {
+                      # Arcadion (Adjust names to match exactly what Tomestone/FFLogs outputs)
+                      "AAC Light-heavyweight M1 (Savage)": "M1S",
+                      "AAC Light-heavyweight M2 (Savage)": "M2S",
+                      "AAC Light-heavyweight M3 (Savage)": "M3S",
+                      "AAC Light-heavyweight M4 (Savage)": "M4S",
+                      "AAC Heavyweight M3 (Savage)": "M11S",
+                      "AAC Heavyweight M4 (Savage)": "M12S",
+                      # Ultimates
+                      "The Omega Protocol (Ultimate)": "TOP",
+                      "Futures Rewritten (Ultimate)": "FRU",
+                      "Dragonsong's Reprise (Ultimate)": "DSR",
+                      "The Epic of Alexander (Ultimate)": "TEA",
+                      "The Weapon's Refrain (Ultimate)": "UWU",
+                      "The Unending Coil of Bahamut (Ultimate)": "UCOB"
+                  }
 
-            except Exception as e:
-            print(json.dumps({"text": "Tomestone Err", "tooltip": str(e), "class": "error"}))
-            '')
+                  # 1. Check if the exact name is in our mapping dictionary
+                  if full_name in fight_mappings:
+                      display_name = fight_mappings[full_name]
+                  # 2. Check if it's an Unreal fight (e.g., "The Jade Stoa (Unreal)")
+                  elif "(Unreal)" in full_name:
+                      display_name = "Unreal"
+                  # 3. Fallback for things not mapped yet
+                  else:
+                      display_name = full_name.replace("(Savage)", "(S)").replace("(Ultimate)", "(U)")
+                  # --- STATUS PROCESSING ---
+                  kills = latest.get('killsCount', 0)
+                  is_kill = kills > 0
+                  if is_kill:
+                      status_text = "CLEARED"
+                      metric = latest.get('killDuration', 'N/A')
+                      css_class = "cleared"
+                      icon = ""
+                  else:
+                      status_text = "WIPE"
+                      metric = latest.get('bestPercent', 'N/A')
+                      css_class = "wipe"
+                      icon = ""
+
+                  # --- OUTPUT ---
+                  output = {
+                      "text": f"{icon} {display_name} {metric} [{time_str}]",
+                      "tooltip": f"<b>{full_name}</b>\nStatus: {status_text}\nResult: {metric}\nEnded: {raw_time} (UTC)",
+                      "class": css_class
+                  }
+                  print(json.dumps(output))
+
+              except Exception as e:
+                  # In case of error, we can either hide it or show "Err".
+                  # Showing Err is usually better for debugging.
+                  print(json.dumps({"text": "Tomestone Err", "tooltip": str(e), "class": "error"}))
+    '')
 
             # Streamtrack Script
             (pkgs.writeShellApplication {
@@ -323,4 +347,4 @@
       })
     ];
   };
-};
+}
