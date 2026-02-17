@@ -30,7 +30,7 @@ in
         home-manager.backupFileExtension = "hm-bak";
         home-manager.extraSpecialArgs = { inherit inputs username; };
         home-manager.sharedModules = [
-          inputs.sops-nix.homeManagerModules.sops
+          inputs.sops-nix.homeModules.sops
         ];
       }
 

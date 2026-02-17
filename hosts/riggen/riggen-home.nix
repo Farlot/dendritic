@@ -9,12 +9,12 @@
       
       # 1. Import all the pure dotfile modules we just made!
       imports = [
-        inputs.self.homeManagerModules.kitty
-        inputs.self.homeManagerModules.scripts
-        inputs.self.homeManagerModules.yazi
-        inputs.self.homeManagerModules.stylix
-        inputs.self.homeManagerModules.neovim
-        inputs.self.homeManagerModules.desktop
+        inputs.self.homeModules.kitty
+        inputs.self.homeModules.scripts
+        inputs.self.homeModules.yazi
+        inputs.self.homeModules.stylix
+        inputs.self.homeModules.neovim
+        inputs.self.homeModules.desktop
       ];
 
       # 2. Base identity

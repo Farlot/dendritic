@@ -2,9 +2,9 @@
 
 {
   # Expose your custom Neovim setup as a reusable flake module!
-  flake.homeManagerModules.neovim = { config, pkgs, lib, ... }: {
+  flake.homeModules.neovim = { config, pkgs, lib, ... }: {
 
-    imports = [ inputs.nixvim.homeManagerModules.nixvim ];
+    imports = [ inputs.nixvim.homeModules.nixvim ];
 
     programs.nixvim = {
       enable = true;

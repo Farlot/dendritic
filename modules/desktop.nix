@@ -2,7 +2,7 @@
 
 {
   # Expose this as a home-manager module for your hosts to import
-  flake.homeManagerModules.desktop = { pkgs, config, lib, ... }: {
+  flake.homeModules.desktop = { pkgs, config, lib, ... }: {
     
     home.packages = with pkgs; [
       # --- Communication & Productivity ---

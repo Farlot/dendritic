@@ -24,8 +24,8 @@
     home-manager.users.${username} = {
       
       imports = [
-        inputs.self.homeManagerModules.waybar
-        inputs.self.homeManagerModules.rofi
+        inputs.self.homeModules.waybar
+        inputs.self.homeModules.rofi
       ];
       # Enable Hyprland through Home Manager
       wayland.windowManager.hyprland = {

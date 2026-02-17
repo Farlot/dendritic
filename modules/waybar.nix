@@ -2,7 +2,7 @@
 
 {
   # Expose this strictly as a Home Manager module!
-  flake.homeManagerModules.waybar = { config, pkgs, lib, ... }: {
+  flake.homeModules.waybar = { config, pkgs, lib, ... }: {
     
     programs.waybar = {
       enable = true;

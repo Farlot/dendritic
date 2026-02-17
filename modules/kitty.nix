@@ -2,7 +2,7 @@
 
 {
   # Expose Kitty strictly as a Home Manager module!
-  flake.homeManagerModules.kitty = { config, pkgs, lib, ... }: {
+  flake.homeModules.kitty = { config, pkgs, lib, ... }: {
     
     programs.kitty = {
       enable = true;

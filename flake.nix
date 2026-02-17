@@ -41,7 +41,7 @@
         (import-tree ./modules)
       ];
 
-      options.flake.homeManagerModules = inputs.nixpkgs.lib.mkOption {
+      options.flake.homeModules = inputs.nixpkgs.lib.mkOption {
         type = inputs.nixpkgs.lib.types.lazyAttrsOf inputs.nixpkgs.lib.types.unspecified;
         default = { };
       };

@@ -2,7 +2,7 @@
 
 {
   # Expose your custom scripts as a reusable flake module!
-  flake.homeManagerModules.scripts = { config, pkgs, lib, username, ... }: {
+  flake.homeModules.scripts = { config, pkgs, lib, username, ... }: {
 
     home.packages = [
       (pkgs.writeShellApplication {

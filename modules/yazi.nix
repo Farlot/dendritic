@@ -2,7 +2,7 @@
 
 {
   # Expose Yazi strictly as a Home Manager module!
-  flake.homeManagerModules.yazi = { config, pkgs, lib, ... }: {
+  flake.homeModules.yazi = { config, pkgs, lib, ... }: {
     
     programs.yazi = {
       enable = true;

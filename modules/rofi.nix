@@ -2,7 +2,7 @@
 
 {
   # Expose this strictly as a Home Manager module!
-  flake.homeManagerModules.rofi = { config, pkgs, lib, ... }: {
+  flake.homeModules.rofi = { config, pkgs, lib, ... }: {
     
     stylix.targets.rofi.enable = false;
     programs.rofi = {
