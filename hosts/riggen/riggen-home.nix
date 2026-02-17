@@ -10,9 +10,7 @@
       # 1. Import all the pure dotfile modules we just made!
       imports = [
         inputs.self.homeManagerModules.kitty
-        inputs.self.homeManagerModules.rofi
         inputs.self.homeManagerModules.scripts
-        inputs.self.homeManagerModules.waybar
         inputs.self.homeManagerModules.yazi
         inputs.self.homeManagerModules.stylix
         inputs.self.homeManagerModules.neovim
