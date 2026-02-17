@@ -17,6 +17,7 @@
       inputs.self.nixosModules.virt
       inputs.self.nixosModules.ckb
       inputs.self.nixosModules.hyprland
+      inputs.self.nixosModules.gameservers
     ];
 
     # ================================================================
