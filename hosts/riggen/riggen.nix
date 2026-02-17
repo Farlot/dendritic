@@ -63,11 +63,6 @@
     # ================================================================
     # Desktop Environment & Fonts
     # ================================================================
-    programs.hyprland = { 
-      enable = true; 
-      xwayland.enable = true;
-    };
-    programs.hyprlock.enable = true;
 
     fonts.packages = with pkgs; [ 
       nerd-fonts.jetbrains-mono 
