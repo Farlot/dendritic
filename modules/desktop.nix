@@ -17,6 +17,7 @@
       
       # --- Utilities & Graphics ---
       flameshot
+      gocryptfs
       hyprshot
       loupe
       gimp
