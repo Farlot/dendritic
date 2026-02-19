@@ -9,7 +9,7 @@
       obsidian
       teams-for-linux
       element-desktop
-      discord
+      vesktop
       
       # --- Media & Web ---
       spotify

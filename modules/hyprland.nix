@@ -57,7 +57,7 @@
           #################
           exec-once = [
             "[workspace 2 silent] brave"
-            "[workspace 2 silent] discord"
+            "[workspace 2 silent] vesktop"
             "[workspace 8 silent] ckb-next"
             "[workspace 8 silent] keepassxc"
             "[workspace 6 silent] teams-for-linux"
