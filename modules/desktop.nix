@@ -10,7 +10,9 @@
       teams-for-linux
       element-desktop
       vesktop
-      
+      mumble
+      teamspeak6-client
+
       # --- Media & Web ---
       spotify
       mpv
