@@ -90,6 +90,10 @@
       shell = pkgs.zsh;
     };
 
+    environment.sessionVariables = {
+      NIXPKGS_ALLOW_UNFREE = "1";
+    };
+
     nixpkgs.config.allowUnfree = true;
     programs.nix-ld.enable = true;
     programs.git.enable = true;
@@ -107,7 +111,7 @@
     };
 
     boot.kernelPackages = pkgs.linuxPackages_latest;
-    
+
     xdg.portal = {
       enable = true;
       extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
