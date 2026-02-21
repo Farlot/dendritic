@@ -215,6 +215,7 @@
             "$mainMod, Tab, cyclenext, visible"
             "$mainMod SHIFT, Tab, cyclenext, visible prev"
             "$mainMod, Space, layoutmsg, swapwithmaster auto"
+            "$mainMod, n, layoutmsg, orientationcycle"
 
             # Special workspace
             "$mainMod, S, togglespecialworkspace, magic"
