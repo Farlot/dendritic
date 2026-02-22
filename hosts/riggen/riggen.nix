@@ -24,6 +24,15 @@
     # ================================================================
     # Hardware & Kernel Settings
     # ================================================================
+
+    boot.loader.grub = {
+      enable = true;
+      device = "nodev";
+      efiSupport = true;
+    };
+    boot.loader.systemd-boot.enable = false;
+
+
     boot.kernelParams = [ "kvm.enable_virt_at_load=0" "nvidia-drm.fbdev=0" ];
 
     hardware.ckb-next.enable = true;
@@ -62,6 +71,41 @@
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
 
+    # ================================================================
+    # Audio
+    # ================================================================
+    # Noisecancel
+    services.pipewire.extraConfig.pipewire."99-input-denoising" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+          args = {
+            "node.description" = "Noise Canceling Source";
+            "media.name" = "Noise Canceling Source";
+            "filter.graph" = {
+              nodes = [
+                {
+                  type = "ladspa";
+                  name = "rnnoise";
+                  plugin = "${pkgs.rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so";
+                  label = "noise_suppressor_mono";
+                  control = { "VAD Threshold (%)" = 85.0; };
+                }
+              ];
+            };
+            "capture.props" = {
+              "node.name" = "capture.rnnoise_source";
+              "node.passive" = true;
+              "target.object" = "alsa_input.usb-TC-Helicon_GoXLR-00.HiFi__Headset__source";
+            };
+            "playback.props" = {
+              "node.name" = "rnnoise_source";
+              "media.class" = "Audio/Source";
+            };
+          };
+        }
+      ];
+    };
     # ================================================================
     # Desktop Environment & Fonts
     # ================================================================

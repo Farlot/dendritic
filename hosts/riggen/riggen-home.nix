@@ -3,6 +3,8 @@
 {
   # We expose this as a NixOS module so your host's assembly line can easily load it
   flake.nixosModules.riggen-home = { pkgs, lib, username, ... }: {
+
+    imports = [ inputs.self.nixosModules.desktop ];
     
     # This injects the Home Manager scope into the system build
     home-manager.users.${username} = { config, ... }: {
@@ -14,7 +16,6 @@
         inputs.self.homeModules.yazi
         inputs.self.homeModules.stylix
         inputs.self.homeModules.neovim
-        inputs.self.homeModules.desktop
       ];
 
       # 2. Base identity

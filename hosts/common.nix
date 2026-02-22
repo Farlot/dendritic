@@ -17,69 +17,9 @@
 
     networking.networkmanager.enable = true;
     networking.firewall.enable = true;
-
-    boot.loader.grub = {
-      enable = true;
-      device = "nodev";
-      efiSupport = true;
-    };
-    boot.loader.systemd-boot.enable = false;
-
+    
     time.timeZone = "Europe/Oslo";
     i18n.defaultLocale = "en_US.UTF-8";
-    
-    services.xserver.enable = true;
-    services.displayManager.sddm = {
-      enable = true;
-      autoNumlock = true;
-    };
-
-    services.xserver.xkb = { layout = "no"; variant = ""; };
-    console.keyMap = "no";
-    services.printing.enable = true;
-
-    # AUDIO
-    services.pulseaudio.enable = false;
-    security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
-
-    # Noise Canceling
-    services.pipewire.extraConfig.pipewire."99-input-denoising" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-filter-chain";
-          args = {
-            "node.description" = "Noise Canceling Source";
-            "media.name" = "Noise Canceling Source";
-            "filter.graph" = {
-              nodes = [
-                {
-                  type = "ladspa";
-                  name = "rnnoise";
-                  plugin = "${pkgs.rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so";
-                  label = "noise_suppressor_mono";
-                  control = { "VAD Threshold (%)" = 85.0; };
-                }
-              ];
-            };
-            "capture.props" = {
-              "node.name" = "capture.rnnoise_source";
-              "node.passive" = true;
-              "target.object" = "alsa_input.usb-TC-Helicon_GoXLR-00.HiFi__Headset__source";
-            };
-            "playback.props" = {
-              "node.name" = "rnnoise_source";
-              "media.class" = "Audio/Source";
-            };
-          };
-        }
-      ];
-    };
 
     # Shell
     programs.zsh.enable = true;
