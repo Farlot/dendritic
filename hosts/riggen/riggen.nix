@@ -18,6 +18,7 @@
       inputs.self.nixosModules.ckb
       inputs.self.nixosModules.hyprland
       inputs.self.nixosModules.gameservers
+      inputs.self.nixosModules.mumble-server
     ];
 
     # ================================================================
