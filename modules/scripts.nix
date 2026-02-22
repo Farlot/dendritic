@@ -6,6 +6,16 @@
 
     home.packages = [
       (pkgs.writeShellApplication {
+        name = "brave-vpn";
+        runtimeInputs = [ pkgs.brave ];
+        text = ''
+          echo "🚀 Launching Brave through Mullvad VPN..."
+          # Force traffic and DNS resolution through the WireGuard SOCKS5 proxy
+          brave --proxy-server="socks5://10.64.0.1:1080" \
+                --host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE 10.64.0.1" "$@"
+        '';
+      })
+      (pkgs.writeShellApplication {
         name = "comfy-vault"; # Open vault for use with ComfyUI
         runtimeInputs = [ pkgs.gocryptfs pkgs.libnotify pkgs.util-linux ];
         text = ''

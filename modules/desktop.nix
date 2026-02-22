@@ -65,6 +65,16 @@
       };
     };
 
+    # --- Custom Desktop Entries ---
+    xdg.desktopEntries.brave-vpn = {
+      name = "Brave (Mullvad VPN)";
+      genericName = "Web Browser";
+      exec = "brave-vpn %U";
+      icon = "brave";
+      terminal = false;
+      categories = [ "Network" "WebBrowser" ];
+    };
+
     # --- Desktop Programs ---
     programs.brave = {
       enable = true;

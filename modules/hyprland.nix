@@ -56,7 +56,7 @@
           ### AUTOSTART ###
           #################
           exec-once = [
-            "[workspace 2 silent] brave"
+            "[workspace 2 silent] brave-vpn"
             "[workspace 2 silent] vesktop"
             "[workspace 8 silent] ckb-next"
             "[workspace 8 silent] keepassxc"
@@ -175,7 +175,7 @@
           "$mainMod" = "SUPER";
 
           bind = [
-            "$mainMod, W, exec, brave -show"
+            "$mainMod, W, exec, brave-vpn" 
             "$mainMod, A, exec, rofi -show drun"
             "ALT, Space, exec, rofi -show calc -modi calc -no-show-match -no-sort"
             "$mainMod, F, fullscreen"
