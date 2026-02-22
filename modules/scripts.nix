@@ -9,10 +9,11 @@
         name = "brave-vpn";
         runtimeInputs = [ pkgs.brave ];
         text = ''
-          echo "🚀 Launching Brave through Mullvad VPN..."
-          # Force traffic and DNS resolution through the WireGuard SOCKS5 proxy
+          echo "🚀 Launching Brave through Mullvad VPN (Twitch bypassed)..."
+          # Force traffic through Mullvad, but bypass Twitch domains to avoid shadowbans
           brave --proxy-server="socks5://10.64.0.1:1080" \
-                --host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE 10.64.0.1" "$@"
+                --proxy-bypass-list="*.twitch.tv,*.ttvnw.net,*.jtvnw.net" \
+                --host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE 10.64.0.1, EXCLUDE *.twitch.tv, EXCLUDE *.ttvnw.net, EXCLUDE *.jtvnw.net" "$@"
         '';
       })
       (pkgs.writeShellApplication {
